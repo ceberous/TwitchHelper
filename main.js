@@ -22,7 +22,6 @@ module.exports.personal = Personal;
 // const TwitchIRCBot = require( "./twitch_irc_bot.js" );
 // const IRC_Observer = require( "./twitch_irc_observer.js" );
 const Task_Manager = require( "./task_manager.js" );
-//const FacebookUtils = require( "./facebook_utils.js" );
 
 ( async ()=> {
 
@@ -36,7 +35,5 @@ const Task_Manager = require( "./task_manager.js" );
 
 	//let cache_viewer_list = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.cacheViewerList );
 	//await Task_Manager.cacheViewerList();
-
-	//FacebookUtils.message( "Ideth Dnek" , "wadu hek testing 2" );
 
 })();
