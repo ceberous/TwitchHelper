@@ -1,9 +1,6 @@
 const request = require( "request" );
-const path = require( "path" );
 
-const PersonalFilePath = path.join( process.env.HOME , ".config" , "personal" , "observe_twitch_chat.js" );
-console.log( PersonalFilePath );
-const Personal = require( PersonalFilePath ).twitch;
+const Personal = require( "./main.js" ).personal.twitch;
 console.log( Personal );
 
 
