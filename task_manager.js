@@ -2,7 +2,6 @@ const TwitchAPI = require( "./twitch_api_utils.js" );
 const FacebookUtils = require( "./facebook_utils.js" );
 
 const Personal = require( "./main.js" ).personal;
-
 let db = require( "./main.js" ).db;
 
 // StateDB.self[ "last_notified" ][ notifiable[ i ] ] = new Date();
