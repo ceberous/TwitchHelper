@@ -18,13 +18,14 @@ module.exports.personal = Personal;
 //const TwitchAPI = require( "./twitch_api_utils.js" );
 // const TwitchIRCBot = require( "./twitch_irc_bot.js" );
 // const IRC_Observer = require( "./twitch_irc_observer.js" );
-const Task_Manager = require( "./task_manager.js" );
 
 ( async ()=> {
 
 	let db = new JFODB( "state" );
 	if ( !db.self.twitch_users ) { db.self.twitch_users = {}; db.save(); }
 	module.exports.db = db;
+
+	const Task_Manager = require( "./task_manager.js" );
 
 	//await TwitchAPI.refollowAll();
 
