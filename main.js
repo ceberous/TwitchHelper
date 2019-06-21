@@ -10,9 +10,6 @@ process.on( "uncaughtException" , function( err ) {
 const path = require( "path" );
 const schedule = require( "node-schedule" );
 const JFODB = require( "jsonfile-obj-db" );
-let db = new JFODB( "state" );
-if ( !db.self.twitch_users ) { db.self.twitch_users = {}; }
-module.exports.db = db;
 
 const PersonalFilePath = path.join( process.env.HOME , ".config" , "personal" , "twitch_helper.js" );
 const Personal = require( PersonalFilePath );
@@ -24,6 +21,10 @@ module.exports.personal = Personal;
 const Task_Manager = require( "./task_manager.js" );
 
 ( async ()=> {
+
+	let db = new JFODB( "state" );
+	if ( !db.self.twitch_users ) { db.self.twitch_users = {}; db.save(); }
+	module.exports.db = db;
 
 	//await TwitchAPI.refollowAll();
 
