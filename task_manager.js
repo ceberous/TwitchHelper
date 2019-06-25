@@ -1,3 +1,5 @@
+const moment = require( "moment-timezone" );
+
 const TwitchAPI = require( "./twitch_api_utils.js" );
 const FacebookUtils = require( "./facebook_utils.js" );
 
@@ -23,10 +25,17 @@ function CACHE_VIEWER_LIST() {
 module.exports.cacheViewerList = CACHE_VIEWER_LIST;
 
 const twitch_base_url = "https://twitch.tv/";
+const earliest_notification_time = moment().hour( 16 ).minute( 0 );
+const latest_notification_time = moment().hour( 22 ).minute( 30 );
 function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 	return new Promise( async function( resolve , reject ) {
 		try {
 			console.log( "Starting Task --> UPDATE_NOTIFIABLE_LIVE_FOLLOWERS()" );
+
+			// 0.) If Not in Time Window , Return
+			let now = moment.tz( "America/New_York" ); // Eastern Time Zone
+			if ( now.isBefore( earliest_notification_time ) ) { return; }
+			if ( now.isAfter( latest_notification_time ) ) { return; }
 
 			// 1.) Get 'Live' twitch 'followers'
 			let result = await TwitchAPI.getLiveNotifiableUsers();
