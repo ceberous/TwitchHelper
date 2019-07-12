@@ -34,8 +34,8 @@ function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 
 			// 0.) If Not in Time Window , Return
 			let now = moment.tz( "America/New_York" ); // Eastern Time Zone
-			if ( now.isBefore( earliest_notification_time ) ) { return; }
-			if ( now.isAfter( latest_notification_time ) ) { return; }
+			//if ( now.isBefore( earliest_notification_time ) ) { console.log( "Too Early" );  return; }
+			if ( now.isAfter( latest_notification_time ) ) { console.log( "Too Late" );  return; }
 
 			// 1.) Get 'Live' twitch 'followers'
 			let result = await TwitchAPI.getLiveNotifiableUsers();
