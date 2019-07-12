@@ -31,7 +31,7 @@ module.exports.personal = Personal;
     //let connection = await TwitchIRCBot.connect();
     //connection.irc.on( "raw_message" , IRC_Observer.onRawMessage );
 
-    await Task_Manager.updateNotifiableLiveFollowers();
+    await require( "../task_manager.js" ).updateNotifiableLiveFollowers();
 
     //let cache_viewer_list = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.cacheViewerList );
     //await Task_Manager.cacheViewerList();
