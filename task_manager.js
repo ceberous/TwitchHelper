@@ -25,8 +25,8 @@ function CACHE_VIEWER_LIST() {
 module.exports.cacheViewerList = CACHE_VIEWER_LIST;
 
 const twitch_base_url = "https://twitch.tv/";
-const earliest_notification_time = moment().hour( 11 ).minute( 0 );
-const latest_notification_time = moment().hour( 22 ).minute( 30 );
+const earliest_notification_time = moment.tz( moment().hour( 11 ).minute( 0 ) , "America/New_York" );
+const latest_notification_time = moment.tz( moment().hour( 22 ).minute( 30 ) , "America/New_York" );
 function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 	return new Promise( async function( resolve , reject ) {
 		try {
