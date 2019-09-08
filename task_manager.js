@@ -25,21 +25,28 @@ function CACHE_VIEWER_LIST() {
 module.exports.cacheViewerList = CACHE_VIEWER_LIST;
 
 const twitch_base_url = "https://twitch.tv/";
-const earliest_notification_time = moment.tz( moment().hour( 11 ).minute( 0 ) , "America/New_York" );
-const latest_notification_time = moment.tz( moment().hour( 22 ).minute( 30 ) , "America/New_York" );
+const earliest_notification_time_hours = 11;
+const earliest_notification_time_minutes = 0;
+const latest_notification_time_hours = 22;
+const latest_notification_time_minutes = 30;
 function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 	return new Promise( async function( resolve , reject ) {
 		try {
 			console.log( "Starting Task --> UPDATE_NOTIFIABLE_LIVE_FOLLOWERS()" );
 
 			// 0.) If Not in Time Window , Return
-			let now = moment.tz( moment() , "America/New_York" ); // Eastern Time Zone
-			console.log( now );
-			console.log( earliest_notification_time );
-			console.log( latest_notification_time );
-			//if ( now.isBefore( earliest_notification_time ) ) { console.log( "Too Early" );  return; }
-			if ( !now.isAfter( earliest_notification_time ) ) { console.log( "Too Early" ); resolve(); return; }
-            if ( now.isAfter( latest_notification_time ) ) { console.log( "Too Late" ); resolve(); return; }
+			let now = new Date().toLocaleString( "en-US" , { timeZone: "America/New_York" } );
+			now = new Date( now );
+			const now_hours = now.getHours();
+			const now_minutes = now.getMinutes();
+			if ( now_hours < earliest_notification_time_hours ) { console.log( "Too Early" ); return; }
+			if ( now_hours === earliest_notification_time_hours ) {
+				if ( now_minutes < latest_notification_time_minutes ) { console.log( "Too Early" ); return; }
+			}
+			if ( now_hours > latest_notification_time_hours ) { console.log( "Too Late" ); return; }
+			if ( now_hours === latest_notification_time_hours ) {
+				if ( now_minutes > latest_notification_time_minutes ) { console.log( "Too Early" ); return; }
+			}
 
 			// 1.) Get 'Live' twitch 'followers'
 			let result = await TwitchAPI.getLiveNotifiableUsers();
