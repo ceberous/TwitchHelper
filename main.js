@@ -32,6 +32,7 @@ module.exports.personal = Personal;
 	//let connection = await TwitchIRCBot.connect();
 	//connection.irc.on( "raw_message" , IRC_Observer.onRawMessage );
 
+	await Task_Manager.updateNotifiableLiveFollowers();
 	let update_notifiable_live_followers = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.updateNotifiableLiveFollowers );
 	//await Task_Manager.updateNotifiableLiveFollowers();
 
