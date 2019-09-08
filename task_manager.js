@@ -34,6 +34,9 @@ function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 
 			// 0.) If Not in Time Window , Return
 			let now = moment.tz( "America/New_York" ); // Eastern Time Zone
+			console.log( now );
+			console.log( earliest_notification_time );
+			console.log( latest_notification_time );
 			//if ( now.isBefore( earliest_notification_time ) ) { console.log( "Too Early" );  return; }
 			if ( !now.isAfter( earliest_notification_time ) ) { console.log( "Too Early" ); resolve(); return; }
             if ( now.isAfter( latest_notification_time ) ) { console.log( "Too Late" ); resolve(); return; }
