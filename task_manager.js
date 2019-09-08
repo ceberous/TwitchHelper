@@ -33,7 +33,7 @@ function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 			console.log( "Starting Task --> UPDATE_NOTIFIABLE_LIVE_FOLLOWERS()" );
 
 			// 0.) If Not in Time Window , Return
-			let now = moment.tz( "America/New_York" ); // Eastern Time Zone
+			let now = moment.tz( moment() , "America/New_York" ); // Eastern Time Zone
 			console.log( now );
 			console.log( earliest_notification_time );
 			console.log( latest_notification_time );
