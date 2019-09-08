@@ -27,7 +27,7 @@ module.exports.personal = Personal;
 
 	const Task_Manager = require( "./task_manager.js" );
 
-	//await TwitchAPI.refollowAll();
+	await TwitchAPI.refollowAll();
 
 	//let connection = await TwitchIRCBot.connect();
 	//connection.irc.on( "raw_message" , IRC_Observer.onRawMessage );
