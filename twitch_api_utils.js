@@ -38,8 +38,13 @@ function GET_VIEWERS_IN_OBSERVED_CHANNELS() {
 	return new Promise( async function( resolve , reject ) {
 		try {
 			let final = {};
-			for( let i = 0; i < Personal.observe_channels.length; ++i ) {
-				let channel = Personal.observe_channels[ i ].split( "#" )[ 1 ];
+			// for( let i = 0; i < Personal.observe_channels.length; ++i ) {
+			// 	let channel = Personal.observe_channels[ i ].split( "#" )[ 1 ];
+			// 	let result = await GET_VIEWERS( channel );
+			// 	final[ channel ] = result;
+			// }
+			for( let i = 0; i < Personal.followers.length; ++i ) {
+				let channel = Personal.followers[ i ];
 				let result = await GET_VIEWERS( channel );
 				final[ channel ] = result;
 			}

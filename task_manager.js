@@ -2,6 +2,7 @@ const moment = require( "moment-timezone" );
 
 const TwitchAPI = require( "./twitch_api_utils.js" );
 const FacebookUtils = require( "./facebook_utils.js" );
+const GenericUtils = require( "./generic_utils.js" );
 
 const Personal = require( "./main.js" ).personal;
 let db = require( "./main.js" ).db;
@@ -9,6 +10,17 @@ let db = require( "./main.js" ).db;
 // StateDB.self[ "last_notified" ][ notifiable[ i ] ] = new Date();
 // StateDB.save();
 
+function channelsAccountIsActiveIn( username , viewer_list ) {
+	let active_channels = [];
+	for ( let channel in viewer_list ) {
+		for ( let user_role in viewer_list[ channel ][ "chatters" ] ) {
+			if ( viewer_list[ channel ][ "chatters" ][ user_role ].indexOf( username ) !== -1 ) {
+				active_channels.push( channel );
+			}
+		}
+	}
+	return active_channels;
+}
 
 function CACHE_VIEWER_LIST() {
 	return new Promise( async function( resolve , reject ) {
@@ -16,6 +28,14 @@ function CACHE_VIEWER_LIST() {
 			console.log( "Starting Task --> CACHE_VIEWER_LIST()" );
 			let result = await TwitchAPI.getViewersInObservedChannels();
 			console.log( result );
+			const active_channels = channelsAccountIsActiveIn( Personal.twitch.primary_username , result );
+			console.log( "Active Channels === " );
+			console.log( active_channels );
+			for ( let i = 0; i < active_channels.length; ++i ) {
+				const message = `${ Personal.twitch.primary_username } is currently active in https://twitch.tv/${ active_channels[ i ] }`;
+				await GenericUtils.twilioMessage( message );
+				await GenericUtils.sleep( 1000 );
+			}
 			resolve();
 			return;
 		}
@@ -35,8 +55,7 @@ function UPDATE_NOTIFIABLE_LIVE_FOLLOWERS() {
 			console.log( "Starting Task --> UPDATE_NOTIFIABLE_LIVE_FOLLOWERS()" );
 
 			// 0.) If Not in Time Window , Return
-			let now = new Date().toLocaleString( "en-US" , { timeZone: "America/New_York" } );
-			now = new Date( now );
+			let now = new Date( new Date().toLocaleString( "en-US" , { timeZone: "America/New_York" } ) );
 			const now_hours = now.getHours();
 			const now_minutes = now.getMinutes();
 			if ( now_hours < earliest_notification_time_hours ) { console.log( "Too Early" ); return; }

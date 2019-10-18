@@ -29,14 +29,14 @@ module.exports.personal = Personal;
 
 	await require( "./twitch_api_utils.js" ).refollowAll();
 
-	//let connection = await TwitchIRCBot.connect();
-	//connection.irc.on( "raw_message" , IRC_Observer.onRawMessage );
+	// let connection = await TwitchIRCBot.connect();
+	// connection.irc.on( "raw_message" , IRC_Observer.onRawMessage );
 
 	await Task_Manager.updateNotifiableLiveFollowers();
-	let update_notifiable_live_followers = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.updateNotifiableLiveFollowers );
+	let update_notifiable_live_followers_job = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.updateNotifiableLiveFollowers );
 	//await Task_Manager.updateNotifiableLiveFollowers();
 
-	//let cache_viewer_list = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.cacheViewerList );
-	//await Task_Manager.cacheViewerList();
+	let cache_viewer_list_job = schedule.scheduleJob( "*/5 * * * *" , Task_Manager.cacheViewerList );
+	await Task_Manager.cacheViewerList();
 
 })();
