@@ -26,16 +26,42 @@ function CACHE_VIEWER_LIST() {
 	return new Promise( async function( resolve , reject ) {
 		try {
 			console.log( "Starting Task --> CACHE_VIEWER_LIST()" );
+            //let now = new Date( new Date().toLocaleString( "en-US" , { timeZone: "America/New_York" } ) );
 			let result = await TwitchAPI.getViewersInObservedChannels();
 			console.log( result );
 			const active_channels = channelsAccountIsActiveIn( Personal.twitch.primary_username , result );
 			console.log( "Active Channels === " );
 			console.log( active_channels );
+            let final_notifiable = [];
 			for ( let i = 0; i < active_channels.length; ++i ) {
-				const message = `${ Personal.twitch.primary_username } is currently active in https://twitch.tv/${ active_channels[ i ] }`;
-				await GenericUtils.twilioMessage( message );
-				await GenericUtils.sleep( 1000 );
+                if ( !db.self.twitch_users[ active_channels[ i ] ] ) { db.self.twitch_users[ active_channels[ i ] ] = {}; }
+                const now = new Date().getTime() / 1000
+                // If a record exists for this user already
+                if ( db.self.twitch_users[ active_channels[ i ] ] && db.self.twitch_users[ active_channels[ i ] ][ "last_reported_active" ] ) {
+                    const previous = new Date( db.self.twitch_users[ active_channels[ i ] ][ "last_reported_active" ] );
+                    let difference = ( now - previous );
+                    if ( difference > 10800 ) {
+                        final_notifiable.push( active_channels[ i ] );
+                        db.self.twitch_users[ active_channels[ i ] ][ "last_reported_active" ] = now;
+                        db.save();
+                    }
+                    else {
+                        console.log( "Already Notified about Them Being 'Active' in the twitch channel in 'this' 3 hour window" );
+                        console.log( "Waiting at Least " + ( 10800 - difference ).toString() + " seconds" );
+                    }
+                }
+                else { // Create New / Initial Record
+                    final_notifiable.push( active_channels[ i ] );
+                    db.self.twitch_users[ active_channels[ i ] ][ "last_reported_active" ] = now;
+                    db.save();
+                }
 			}
+
+            for ( let i = 0; i < final_notifiable.length; ++i ) {
+                const message = `${ Personal.twitch.primary_username } is currently active in https://twitch.tv/${ final_notifiable[ i ] }`;
+                await GenericUtils.twilioMessage( message );
+                await GenericUtils.sleep( 1000 );
+            }
 			resolve();
 			return;
 		}
