@@ -58,7 +58,7 @@ function CACHE_VIEWER_LIST() {
 			}
 
             for ( let i = 0; i < final_notifiable.length; ++i ) {
-                const message = `${ Personal.twitch.primary_username } is currently active in https://twitch.tv/${ final_notifiable[ i ] }`;
+                const message = `${ Personal.twitch.primary_username } is currently active on ${ final_notifiable[ i ] }'s channel https://twitch.tv/${ final_notifiable[ i ] }`;
                 await GenericUtils.twilioMessage( message );
                 await GenericUtils.sleep( 1000 );
             }
